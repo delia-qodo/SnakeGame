@@ -47,8 +47,9 @@
         const easyFoodCount = 5; // Number of easy food placements
         function setDifficulty() {
             const diff = document.getElementById('difficulty').value;
-            speed = difficultySettings[diff].speed;
-            minSpeed = difficultySettings[diff].minSpeed;
+            const settings = difficultySettings[diff] || difficultySettings.medium;
+            speed = settings.speed;
+            minSpeed = settings.minSpeed;
         }
 
         function drawCell(x, y, color) {
