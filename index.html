@@ -24,6 +24,10 @@
         <button id="stopBtn">Stop</button>
         <button id="restartBtn">Restart</button>
     </div>
+    <div class="color-controls">
+        <label for="snakeColor">Snake Color:</label>
+        <input type="color" id="snakeColor" value="#4caf50">
+    </div>
     <p>Use arrow keys to control the snake.</p>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -56,11 +60,37 @@
             ctx.fillRect(x, y, gridSize, gridSize);
         }
 
+        // Snake color selection
+        let snakeHeadColor = '#388e3c';
+        let snakeBodyColor = '#4caf50';
+        const colorInput = document.getElementById('snakeColor');
+        colorInput.addEventListener('input', function() {
+            snakeBodyColor = colorInput.value;
+            // Make head a slightly darker shade
+            snakeHeadColor = shadeColor(snakeBodyColor, -20);
+            draw();
+        });
+        // Utility to shade color
+        function shadeColor(color, percent) {
+            let R = parseInt(color.substring(1,3),16);
+            let G = parseInt(color.substring(3,5),16);
+            let B = parseInt(color.substring(5,7),16);
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
+            R = (R<255)?R:255;
+            G = (G<255)?G:255;
+            B = (B<255)?B:255;
+            let RR = ((R.toString(16).length==1)?"0":"") + R.toString(16);
+            let GG = ((G.toString(16).length==1)?"0":"") + G.toString(16);
+            let BB = ((B.toString(16).length==1)?"0":"") + B.toString(16);
+            return "#"+RR+GG+BB;
+        }
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // Draw snake
             snake.forEach((segment, i) => {
-                drawCell(segment.x, segment.y, i === 0 ? '#388e3c' : '#4caf50');
+                drawCell(segment.x, segment.y, i === 0 ? snakeHeadColor : snakeBodyColor);
             });
             // Draw food
             drawCell(food.x, food.y, '#f44336');
@@ -190,6 +220,9 @@
             gameOver = false;
             paused = false;
             foodEaten = 0;
+            // Reset snake color to current picker value
+            snakeBodyColor = colorInput.value;
+            snakeHeadColor = shadeColor(snakeBodyColor, -20);
             if (intervalId) {
                 clearInterval(intervalId);
             }
@@ -205,6 +238,9 @@
         // Initialize game state
         setDifficulty();
         direction = {x: 1, y: 0};
+        // Set initial snake color
+        snakeBodyColor = colorInput.value;
+        snakeHeadColor = shadeColor(snakeBodyColor, -20);
         placeFood();
         draw();
     </script>
