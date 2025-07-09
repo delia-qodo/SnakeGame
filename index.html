@@ -29,6 +29,10 @@
         <input type="color" id="snakeColor" value="#4caf50">
     </div>
     <p>Use arrow keys to control the snake.</p>
+    <div class="high-scores">
+        <h2>High Scores</h2>
+        <ol id="highScoresList"></ol>
+    </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -42,6 +46,35 @@
         let speed = 200; // Will be set by difficulty
         let foodEaten = 0;
         let minSpeed = 60; // Will be set by difficulty
+        // High scores
+        const HIGH_SCORES_KEY = 'snake_high_scores';
+        const MAX_HIGH_SCORES = 10;
+        let highScores = [];
+        function loadHighScores() {
+            const scores = localStorage.getItem(HIGH_SCORES_KEY);
+            highScores = scores ? JSON.parse(scores) : [];
+        }
+        function saveHighScores() {
+            localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores));
+        }
+        function updateHighScores(newScore) {
+            highScores.push(newScore);
+            highScores.sort((a, b) => b - a);
+            if (highScores.length > MAX_HIGH_SCORES) {
+                highScores = highScores.slice(0, MAX_HIGH_SCORES);
+            }
+            saveHighScores();
+            renderHighScores();
+        }
+        function renderHighScores() {
+            const list = document.getElementById('highScoresList');
+            list.innerHTML = '';
+            highScores.forEach((score, idx) => {
+                const li = document.createElement('li');
+                li.textContent = `${idx + 1}. ${score}`;
+                list.appendChild(li);
+            });
+        }
         // Difficulty settings
         const difficultySettings = {
             easy:   { speed: 200, minSpeed: 100 },
@@ -154,6 +187,9 @@
         function gameLoop() {
             if (paused) return;
             if (gameOver) {
+                // Calculate score as snake length - 1
+                const score = snake.length - 1;
+                updateHighScores(score);
                 ctx.fillStyle = 'rgba(0,0,0,0.7)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#fff';
@@ -241,6 +277,8 @@
         // Set initial snake color
         snakeBodyColor = colorInput.value;
         snakeHeadColor = shadeColor(snakeBodyColor, -20);
+        loadHighScores();
+        renderHighScores();
         placeFood();
         draw();
     </script>
