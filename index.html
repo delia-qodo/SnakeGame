@@ -17,6 +17,7 @@
             <option value="easy">Easy</option>
             <option value="medium" selected>Medium</option>
             <option value="hard">Hard</option>
+            <option value="expert">Expert</option>
         </select>
     </div>
     <div class="controls">
@@ -79,7 +80,8 @@
         const difficultySettings = {
             easy:   { speed: 200, minSpeed: 100 },
             medium: { speed: 120, minSpeed: 60 },
-            hard:   { speed: 80,  minSpeed: 40 }
+            hard:   { speed: 80,  minSpeed: 40 },
+            expert: { speed: 50,  minSpeed: 20 }
         };
         const easyFoodCount = 5; // Number of easy food placements
         function setDifficulty() {
