@@ -1,2 +1,5 @@
 [pr_reviewer]
 require_ticket_analysis_review = true
+
+# Default server for ticket IDs
+jira_base_url = "https://codiumai-se.atlassian.net/"
