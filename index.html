@@ -30,9 +30,8 @@
         <input type="color" id="snakeColor" value="#4caf50">
     </div>
     <p>Use arrow keys to control the snake.</p>
-    <div class="high-scores">
-        <h2>High Scores</h2>
-        <ol id="highScoresList"></ol>
+    <div class="high-scores-link">
+        <a href="high-scores.html">View High Scores</a>
     </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -48,8 +47,8 @@
         let foodEaten = 0;
         let minSpeed = 60; // Will be set by difficulty
         // High scores
-        const HIGH_SCORES_KEY = 'snake_high_scores';
-        const MAX_HIGH_SCORES = 10;
+        const HIGH_SCORES_KEY = 'snake_high_scores_v2';
+        const MAX_HIGH_SCORES = 3;
         let highScores = [];
         function loadHighScores() {
             const scores = localStorage.getItem(HIGH_SCORES_KEY);
@@ -58,23 +57,21 @@
         function saveHighScores() {
             localStorage.setItem(HIGH_SCORES_KEY, JSON.stringify(highScores));
         }
-        function updateHighScores(newScore) {
-            highScores.push(newScore);
-            highScores.sort((a, b) => b - a);
-            if (highScores.length > MAX_HIGH_SCORES) {
-                highScores = highScores.slice(0, MAX_HIGH_SCORES);
-            }
-            saveHighScores();
-            renderHighScores();
+        function isHighScore(score) {
+            if (highScores.length < MAX_HIGH_SCORES) return true;
+            return score > highScores[highScores.length - 1].score;
         }
-        function renderHighScores() {
-            const list = document.getElementById('highScoresList');
-            list.innerHTML = '';
-            highScores.forEach((score, idx) => {
-                const li = document.createElement('li');
-                li.textContent = `${idx + 1}. ${score}`;
-                list.appendChild(li);
-            });
+        function updateHighScores(newScore) {
+            if (isHighScore(newScore)) {
+                let name = prompt('New High Score! Enter your name:');
+                if (!name) name = 'Anonymous';
+                highScores.push({ name, score: newScore });
+                highScores.sort((a, b) => b.score - a.score);
+                if (highScores.length > MAX_HIGH_SCORES) {
+                    highScores = highScores.slice(0, MAX_HIGH_SCORES);
+                }
+                saveHighScores();
+            }
         }
         // Difficulty settings
         const difficultySettings = {
@@ -280,7 +277,6 @@
         snakeBodyColor = colorInput.value;
         snakeHeadColor = shadeColor(snakeBodyColor, -20);
         loadHighScores();
-        renderHighScores();
         placeFood();
         draw();
     </script>
