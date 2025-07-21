@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - High Scores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header-row">
+        <h1 class="snake-title"><span class="snake-emoji">🐍</span> High Scores</h1>
+    </div>
+    <ol id="highScoresList"></ol>
+    <div class="high-scores-link">
+        <a href="index.html">Back to Game</a>
+    </div>
+    <script>
+        const HIGH_SCORES_KEY = 'snake_high_scores_v2';
+        function loadHighScores() {
+            const scores = localStorage.getItem(HIGH_SCORES_KEY);
+            return scores ? JSON.parse(scores) : [];
+        }
+        function renderHighScores() {
+            const list = document.getElementById('highScoresList');
+            list.innerHTML = '';
+            const highScores = loadHighScores();
+            highScores.forEach((entry, idx) => {
+                const li = document.createElement('li');
+                li.textContent = `${idx + 1}. ${entry.name} - ${entry.score}`;
+                list.appendChild(li);
+            });
+        }
+        renderHighScores();
+    </script>
+</body>
+</html>
