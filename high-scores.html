@@ -7,9 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>High Scores</h1>
+    <div class="header-row">
+        <h1 class="snake-title"><span class="snake-emoji">🐍</span> High Scores</h1>
+    </div>
     <ol id="highScoresList"></ol>
-    <a href="index.html">Back to Game</a>
+    <div class="high-scores-link">
+        <a href="index.html">Back to Game</a>
+    </div>
     <script>
         const HIGH_SCORES_KEY = 'snake_high_scores_v2';
         function loadHighScores() {

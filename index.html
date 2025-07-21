@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Snake Game</h1>
+    <div class="header-row">
+        <h1 class="snake-title"><span class="snake-emoji">🐍</span> Snake Game</h1>
+    </div>
+    <div class="instructions-row">
+        <span class="instructions-badge">Use arrow keys to control the snake</span>
+    </div>
     <div class="game-container">
         <canvas id="gameCanvas" width="400" height="400"></canvas>
     </div>
@@ -29,7 +34,6 @@
         <label for="snakeColor">Snake Color:</label>
         <input type="color" id="snakeColor" value="#4caf50">
     </div>
-    <p>Use arrow keys to control the snake.</p>
     <div class="high-scores-link">
         <a href="high-scores.html">View High Scores</a>
     </div>
